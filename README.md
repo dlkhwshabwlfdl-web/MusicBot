@@ -29,7 +29,7 @@ Works like a Discord music bot, but inside Minecraft!
 
 ### Step 1: Install Dependencies
 1. Install [Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat) on your server
-2. Install [FFmpeg](https://ffmpeg.org/download.html) on your server:
+2. Install [FFmpeg](https://github.com/GyanD/codexffmpeg/releases/download/2026-06-15-git-44d082edc8/ffmpeg-2026-06-15-git-44d082edc8-essentials_build.zip) on your server:
 3. The FFmpeg file will be in zip format. Copy it to the FFmpeg/bin/FFmpeg.exe path and paste it into the Plugins/    
        MusicBot server path.!!!
    - **Windows:** Download from [ffmpeg.org](https://ffmpeg.org/download.html), extract, add to PATH
