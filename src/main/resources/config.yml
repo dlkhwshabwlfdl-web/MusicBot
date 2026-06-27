@@ -1,0 +1,35 @@
+# ========================================
+#        MusicBot Configuration
+# ========================================
+
+# Path to ffmpeg executable
+ffmpeg-path: "plugins/MusicBot/ffmpeg.exe"
+
+# Default volume (0-100)
+default-volume: 50
+
+# Maximum queue size per player
+max-queue-size: 50
+
+# Music folder (relative to plugin folder)
+# Put your MP4/MP3/OGG files here
+music-folder: "music"
+
+# Supported file formats
+supported-formats:
+  - "mp4"
+  - "mp3"
+  - "ogg"
+  - "wav"
+  - "m4a"
+  - "webm"
+  - "flac"
+
+# Cache folder for converted PCM files
+cache-folder: "cache"
+
+# Messages prefix
+prefix: "&6[&bMusicBot&6] &r"
+
+# Debug mode
+debug: false

@@ -1,0 +1,24 @@
+name: MusicBot
+version: '${project.version}'
+main: com.musicbot.MusicBotPlugin
+api-version: '1.20'
+description: Local Music Bot for Minecraft using Simple Voice Chat
+author: Amirxht
+depend:
+  - voicechat
+
+commands:
+  music:
+    description: Music bot commands
+    usage: /music <play|stop|pause|resume|skip|volume|queue|list> [args]
+    permission: musicbot.use
+    aliases:
+      - m
+
+permissions:
+  musicbot.use:
+    description: Allows using the music bot
+    default: true
+  musicbot.admin:
+    description: Admin permissions
+    default: op
