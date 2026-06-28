@@ -83,4 +83,51 @@ Works like a Discord music bot, but inside Minecraft!
 - `.flac`
 - `.webm`
 
-## 📁 Folder Structure
+---
+
+## 📦 Changelog
+
+### v1.1.0 — Group Session Update
+
+#### 🔧 Bug Fixes
+- **Fixed:** Queue was per-player instead of per-group. Now all group members share one queue.
+- **Fixed:** Multiple players in the same group could start separate music sessions causing audio overlap.
+- **Fixed:** Any player could stop/pause/skip music. Now only the DJ (session starter) can control playback.
+- **Fixed:** System file paths were exposed to players in error messages and `/music list`.
+- **Fixed:** Audio cache didn't invalidate when music files were replaced with the same filename.
+- **Fixed:** Players not connected to Voice Chat could trigger errors.
+
+#### ✨ New Features
+- **Group-Based Sessions:** Each Voice Chat group now has exactly one shared music session.
+- **DJ System:** The player who starts the music becomes the DJ. Only the DJ can stop, pause, resume, skip, and change volume.
+- **All Members Can Queue:** Any group member can add songs to the queue with `/music play`.
+- **Multi-Language Support:** Players can choose their own language with `/music lang`.
+- **Persian (Farsi) Language:** Full Persian translation included.
+- **Auto DJ Transfer:** When the DJ leaves the group, music stops automatically.
+- **BossBar Now Playing:** Shows current song, progress bar, elapsed time, and who requested it — only visible to group members.
+- **Smart Song Search:** Fuzzy matching, partial name search, and word matching.
+- **Tab Completion:** Song names auto-complete when typing `/music play`.
+
+#### 🔒 Security
+- Path traversal protection (blocks `../../` attacks)
+- Input sanitization on all commands
+- Rate limiting (1 second cooldown between commands)
+- No system paths exposed to players
+- File access restricted to `plugins/MusicBot/` folder only
+- Error messages sanitized before showing to players
+
+#### 🌍 Supported Languages
+| Code | Language | Command |
+|------|----------|---------|
+| `en` | English 🇬🇧 | `/music lang en` |
+| `fa` | فارسی 🇮🇷 | `/music lang fa` |
+
+#### 🏗️ Technical Changes
+- Session architecture changed from per-player to per-group
+- Queue is now shared across all group members
+- Audio cache hash includes file modification time and size
+- Group membership monitored every 3 seconds
+- Added `playerdata.yml` for persistent language preferences
+- Added `lang/` folder with translation files
+
+---
