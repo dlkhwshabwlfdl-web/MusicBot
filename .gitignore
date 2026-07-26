@@ -1,10 +1,14 @@
-# Build
+# =====================
+# Java & Build Output
+# =====================
 target/
 *.class
 *.jar
 *.war
 
-# IDE
+# =====================
+# IDEs
+# =====================
 .idea/
 *.iml
 .vscode/
@@ -15,12 +19,16 @@ target/
 *.swo
 *~
 
-# OS
+# =====================
+# OS Files
+# =====================
 .DS_Store
 Thumbs.db
 desktop.ini
 
+# =====================
 # Maven
+# =====================
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -28,7 +36,11 @@ pom.xml.next
 release.properties
 dependency-reduced-pom.xml
 
-# Plugin runtime files (don't commit these)
+# =====================
+# Plugin Specific 
+# (فایل‌هایی که پلاگین روی سرور می‌سازه و نباید آپلود بشن)
+# =====================
+config.yml
 music/
 cache/
 bin/
