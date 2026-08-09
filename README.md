@@ -1,5 +1,9 @@
 # 🎵 MusicBot - Minecraft Voice Chat Music Player
 
+## 🎬 Demo
+
+![ModelFramework Demo](assets/demo.gif)
+
 A Spigot plugin that plays music through **Simple Voice Chat** groups.
 Works like a Discord music bot, but inside Minecraft!
 
