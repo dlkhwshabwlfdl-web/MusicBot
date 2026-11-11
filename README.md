@@ -12,7 +12,7 @@ Works like a Discord music bot, but inside Minecraft!
 - 🎶 Play MP4/MP3/OGG/WAV music files in Voice Chat groups
 - 👥 Group-only playback (only group members hear the music)
 - 📋 Queue system with skip, pause, resume
-- 🔊 Per-player volume control
+- 🔊 Session volume control (DJ only)
 - 📊 BossBar now-playing display with progress
 - 🔒 Secure - no system paths exposed to players
 - 🔍 Smart song search with fuzzy matching
@@ -105,8 +105,6 @@ Works like a Discord music bot, but inside Minecraft!
 - **Group-Based Sessions:** Each Voice Chat group now has exactly one shared music session.
 - **DJ System:** The player who starts the music becomes the DJ. Only the DJ can stop, pause, resume, skip, and change volume.
 - **All Members Can Queue:** Any group member can add songs to the queue with `/music play`.
-- **Multi-Language Support:** Players can choose their own language with `/music lang`.
-- **Persian (Farsi) Language:** Full Persian translation included.
 - **Auto DJ Transfer:** When the DJ leaves the group, music stops automatically.
 - **BossBar Now Playing:** Shows current song, progress bar, elapsed time, and who requested it — only visible to group members.
 - **Smart Song Search:** Fuzzy matching, partial name search, and word matching.
@@ -120,18 +118,10 @@ Works like a Discord music bot, but inside Minecraft!
 - File access restricted to `plugins/MusicBot/` folder only
 - Error messages sanitized before showing to players
 
-#### 🌍 Supported Languages
-| Code | Language | Command |
-|------|----------|---------|
-| `en` | English 🇬🇧 | `/music lang en` |
-| `fa` | فارسی 🇮🇷 | `/music lang fa` |
-
 #### 🏗️ Technical Changes
 - Session architecture changed from per-player to per-group
 - Queue is now shared across all group members
 - Audio cache hash includes file modification time and size
 - Group membership monitored every 3 seconds
-- Added `playerdata.yml` for persistent language preferences
-- Added `lang/` folder with translation files
 
 ---
