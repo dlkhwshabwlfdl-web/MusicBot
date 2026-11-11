@@ -23,6 +23,32 @@ public final class AudioManager {
         return players.get(uuid);
     }
 
+    /**
+     * Find the active session playing in a
+     * Voice Chat group, if any. A group has at
+     * most one shared session: members queue
+     * into it instead of starting a parallel
+     * one, and only its owner (the DJ) controls
+     * playback.
+     */
+    public BotAudioPlayer findSessionForGroup(
+            UUID groupId) {
+        if (groupId == null) return null;
+        for (BotAudioPlayer p : players.values()) {
+            if (!groupId.equals(
+                    p.getCurrentGroupId())) {
+                continue;
+            }
+            BotAudioPlayer.State s = p.getState();
+            if (s == BotAudioPlayer.State.PLAYING
+                    || s == BotAudioPlayer.State.PAUSED
+                    || s == BotAudioPlayer.State.LOADING) {
+                return p;
+            }
+        }
+        return null;
+    }
+
     public void remove(UUID uuid) {
         BotAudioPlayer p = players.remove(uuid);
         if (p != null) p.shutdown();

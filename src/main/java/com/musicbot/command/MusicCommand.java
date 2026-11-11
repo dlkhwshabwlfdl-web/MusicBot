@@ -102,6 +102,39 @@ public final class MusicCommand
                 System.currentTimeMillis());
     }
 
+    // ============ GROUP SESSION ============
+
+    /**
+     * The session currently playing in the
+     * caller's Voice Chat group, if any.
+     * A group has at most one shared session.
+     */
+    private BotAudioPlayer findGroupSession(
+            Player player) {
+        VoicechatServerApi api =
+                plugin.getVoiceChatHook().getApi();
+        if (api == null) return null;
+        ServerPlayer sp =
+                api.fromServerPlayer(player);
+        if (sp == null) return null;
+        VoicechatConnection conn =
+                api.getConnectionOf(sp);
+        if (conn == null
+                || conn.getGroup() == null) {
+            return null;
+        }
+        return plugin.getAudioManager()
+                .findSessionForGroup(
+                        conn.getGroup().getId());
+    }
+
+    private boolean isDj(Player player,
+                         BotAudioPlayer session) {
+        return session != null && session
+                .getOwnerUuid()
+                .equals(player.getUniqueId());
+    }
+
     // ============ PLAY ============
 
     private void handlePlay(Player player,
@@ -185,6 +218,22 @@ public final class MusicCommand
                 .requestedBy(player.getName())
                 .build();
 
+        BotAudioPlayer groupSession =
+                plugin.getAudioManager()
+                        .findSessionForGroup(
+                                group.getId());
+        if (groupSession != null && !isDj(player,
+                groupSession)) {
+            // Another member is the DJ: queue
+            // into the shared group session
+            // instead of starting a parallel one.
+            groupSession.play(track);
+            MessageUtil.send(player,
+                    "&eQueued in the group session: &f"
+                            + track.title());
+            return;
+        }
+
         BotAudioPlayer ap = plugin.getAudioManager()
                 .getOrCreate(player.getUniqueId());
         ap.play(track);
@@ -236,6 +285,11 @@ public final class MusicCommand
         if (ap == null
                 || ap.getState()
                 == BotAudioPlayer.State.IDLE) {
+            if (findGroupSession(player) != null) {
+                MessageUtil.send(player,
+                        "&cOnly the DJ can control playback!");
+                return;
+            }
             MessageUtil.send(player,
                     "&cNothing is playing!");
             return;
@@ -252,6 +306,11 @@ public final class MusicCommand
         if (ap == null
                 || ap.getState()
                 != BotAudioPlayer.State.PLAYING) {
+            if (findGroupSession(player) != null) {
+                MessageUtil.send(player,
+                        "&cOnly the DJ can control playback!");
+                return;
+            }
             MessageUtil.send(player,
                     "&cNothing is playing!");
             return;
@@ -268,6 +327,11 @@ public final class MusicCommand
         if (ap == null
                 || ap.getState()
                 != BotAudioPlayer.State.PAUSED) {
+            if (findGroupSession(player) != null) {
+                MessageUtil.send(player,
+                        "&cOnly the DJ can control playback!");
+                return;
+            }
             MessageUtil.send(player,
                     "&cNothing is paused!");
             return;
@@ -286,6 +350,11 @@ public final class MusicCommand
                 != BotAudioPlayer.State.PLAYING
                 && ap.getState()
                 != BotAudioPlayer.State.PAUSED)) {
+            if (findGroupSession(player) != null) {
+                MessageUtil.send(player,
+                        "&cOnly the DJ can control playback!");
+                return;
+            }
             MessageUtil.send(player,
                     "&cNothing is playing!");
             return;
@@ -303,7 +372,30 @@ public final class MusicCommand
     private void handleVolume(Player player,
                               String[] args) {
         BotAudioPlayer ap = plugin.getAudioManager()
-                .getOrCreate(player.getUniqueId());
+                .get(player.getUniqueId());
+        if (ap == null
+                || ap.getState()
+                == BotAudioPlayer.State.IDLE) {
+            BotAudioPlayer session =
+                    findGroupSession(player);
+            if (session != null) {
+                // A group session is playing and
+                // someone else is the DJ: members
+                // may see the volume, not change it.
+                if (args.length < 2) {
+                    MessageUtil.send(player,
+                            "&7Volume: &e"
+                                    + session.getVolume()
+                                    + "%");
+                    return;
+                }
+                MessageUtil.send(player,
+                        "&cOnly the DJ can control playback!");
+                return;
+            }
+            ap = plugin.getAudioManager()
+                    .getOrCreate(player.getUniqueId());
+        }
         if (args.length < 2) {
             MessageUtil.send(player,
                     "&7Volume: &e"
@@ -331,6 +423,12 @@ public final class MusicCommand
     private void handleQueue(Player player) {
         BotAudioPlayer ap = plugin.getAudioManager()
                 .get(player.getUniqueId());
+        if (ap == null) {
+            // Show the group's shared queue
+            // when the caller has no session
+            // of their own.
+            ap = findGroupSession(player);
+        }
         if (ap == null) {
             MessageUtil.send(player,
                     "&7No active session.");

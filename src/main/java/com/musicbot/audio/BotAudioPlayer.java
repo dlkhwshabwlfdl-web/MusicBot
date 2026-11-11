@@ -174,6 +174,12 @@ public final class BotAudioPlayer {
     }
     public TrackQueue getQueue() { return queue; }
 
+    public UUID getCurrentGroupId() {
+        return currentGroupId;
+    }
+
+    public UUID getOwnerUuid() { return ownerUuid; }
+
     public void shutdown() {
         stopFlag.set(true);
 
@@ -280,8 +286,14 @@ public final class BotAudioPlayer {
      */
     private File convertToPcm(File input)
             throws Exception {
+        // Cache key includes modification time
+        // and size, so replacing a music file
+        // with the same name invalidates the
+        // stale cached PCM.
         String hash = hashString(
-                input.getAbsolutePath());
+                input.getAbsolutePath() + "|"
+                        + input.lastModified() + "|"
+                        + input.length());
         File cacheDir = new File(
                 plugin.getDataFolder(),
                 plugin.getConfigManager()
